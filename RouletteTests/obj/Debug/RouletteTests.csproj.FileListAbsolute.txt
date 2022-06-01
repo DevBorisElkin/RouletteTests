@@ -1,0 +1,7 @@
+C:\Boris\VS_Projects\RouletteTests\RouletteTests\bin\Debug\RouletteTests.exe.config
+C:\Boris\VS_Projects\RouletteTests\RouletteTests\bin\Debug\RouletteTests.exe
+C:\Boris\VS_Projects\RouletteTests\RouletteTests\bin\Debug\RouletteTests.pdb
+C:\Boris\VS_Projects\RouletteTests\RouletteTests\obj\Debug\RouletteTests.csproj.AssemblyReference.cache
+C:\Boris\VS_Projects\RouletteTests\RouletteTests\obj\Debug\RouletteTests.csproj.CoreCompileInputs.cache
+C:\Boris\VS_Projects\RouletteTests\RouletteTests\obj\Debug\RouletteTests.exe
+C:\Boris\VS_Projects\RouletteTests\RouletteTests\obj\Debug\RouletteTests.pdb
