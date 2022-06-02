@@ -10,28 +10,28 @@ namespace RouletteTests
     {
         public static void PlayTests()
         {
-            //int timesToTry = 100;
-            int timesToTry = 100;
-
             int successes = 0;
             int failures = 0;
 
-            //int initialCapital = 2050;
-            //int capitalGoal = 3050;
-
-            int initialCapital = 16385;
-            int capitalGoal = 17385;
-
             int totalGamesPlayed = 0;
+            int totalGamesSkippedOrPlayed = 0;
+
             int oneGameTime = 45;
-            int baseBetSize = 1;
+
+            int initialCapital = 10;
+            int capitalGoal = 30;
+            int timesToTry = 1000;
+            int baseBetSize = 10;
+            int betsToSkip = 15;
+            bool useGraphLogs = false;
 
             while ((successes + failures) < timesToTry)
             {
                 //Player player = new Player(2050, 3050, Player.SpinResult.Red, 1, 10000);
-                Player player = new Player(initialCapital, capitalGoal, Player.SpinResult.Red, baseBetSize, 10000);
+                Player player = new Player(initialCapital, capitalGoal, Player.SpinResult.Red, baseBetSize, 10000, PlayMode.SimpleMartingale, betsToSkip);
                 player.StartPlaying(out bool result);
                 totalGamesPlayed += player.betsHasBeenPlaced;
+                totalGamesSkippedOrPlayed += player.totalBetsSkippedOrPlaced;
 
                 if (result)
                 {
@@ -46,10 +46,14 @@ namespace RouletteTests
                 
                 //Console.ReadKey();
                 Console.WriteLine("___________");
-                Console.WriteLine(player.resultsLog);
-                Console.WriteLine("___________");
-                Console.WriteLine("___________");
-                Console.WriteLine("___________");
+                if (useGraphLogs)
+                {
+                    Console.WriteLine(player.resultsLog);
+                    Console.WriteLine("___________");
+                    Console.WriteLine("___________");
+                    Console.WriteLine("___________");
+                }
+                
 
                 //timesToTry++;
             }
@@ -63,8 +67,9 @@ namespace RouletteTests
             int mathResult = -(initialCapital * failures) + (capitalGoal - initialCapital) * successes;
             Console.WriteLine($"Math Result: {mathResult}");
             Console.WriteLine($"Total games played: {totalGamesPlayed}");
+            Console.WriteLine($"Total games there has been: {totalGamesSkippedOrPlayed}");
 
-            int secondsItTookToPlay = totalGamesPlayed * oneGameTime;
+            int secondsItTookToPlay = totalGamesSkippedOrPlayed * oneGameTime;
             Console.WriteLine($"Time it took to play - Days({TimeSpan.FromSeconds(secondsItTookToPlay).Days}), Hours({TimeSpan.FromSeconds(secondsItTookToPlay).Hours})" +
                 $", Minutes({TimeSpan.FromSeconds(secondsItTookToPlay).Minutes})");
 
