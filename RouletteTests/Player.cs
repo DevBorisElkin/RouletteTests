@@ -19,10 +19,13 @@ namespace RouletteTests
         public int previousBetSize;
         public int previousBetCashResult;
         public int accumulatedLossesInARow;
+        public int maxAccumulatedLossesInARow;
         public int lastAccountSizeBeforePlacingBet;
 
         public int biggestRowSize;
         public SpinResult biggestRowColor;
+
+        public StringBuilder resultsLog;
 
         public Player(int accountAmount, int finalGoal, SpinResult preferredDefaultSpin, int baseBetSize, int betsToPlace)
         {
@@ -31,17 +34,22 @@ namespace RouletteTests
             this.preferredDefaultSpin = preferredDefaultSpin;
             this.baseBetSize = baseBetSize;
             this.betsToPlace = betsToPlace;
+            this.accumulatedLossesInARow = 0;
+            this.maxAccumulatedLossesInARow = 0;
 
             previousBetCashResult = 1;
+
+            resultsLog = new StringBuilder();
         }
 
         public bool StartPlaying(out bool successfulEnding)
         {
-            while (CanContinuePlaying(out bool _, false, out int nextBetSize))
+            while (CanContinuePlaying(out bool success, false, out int nextBetSize))
             {
                 PlaceBet(nextBetSize);
             }
-
+            Console.WriteLine(accountAmount >= finalGoal ? "WINNER" : "LOSER");
+            Console.WriteLine($"Max losses in a row: {maxAccumulatedLossesInARow}");
             Console.WriteLine($"Bets has been placed: {betsHasBeenPlaced}");
             Console.WriteLine($"AccountAmount: {accountAmount}");
 
@@ -56,13 +64,21 @@ namespace RouletteTests
 
             var spinResult = possibleSpinResults[rnd.Next(0, possibleSpinResults.Length)];
 
-            if (spinResult != preferredDefaultSpin)
+            if (spinResult == preferredDefaultSpin)
             {
+                resultsLog.Append("[W]");
+                accumulatedLossesInARow = 0;
                 accountAmount += betSize;
                 previousBetCashResult = betSize;
             }
             else
             {
+                resultsLog.Append("[L]");
+                accumulatedLossesInARow += 1;
+                if(accumulatedLossesInARow > maxAccumulatedLossesInARow)
+                {
+                    maxAccumulatedLossesInARow = accumulatedLossesInARow;
+                }
                 accountAmount -= betSize;
                 previousBetCashResult = -betSize;
             }
